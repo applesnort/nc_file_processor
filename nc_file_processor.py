@@ -10,6 +10,7 @@ import os
 import sys
 import subprocess
 from pathlib import Path
+import difflib
 
 # Try to import tkinterdnd2 for drag-and-drop support
 try:
@@ -254,10 +255,13 @@ class NCFileProcessor(ctk.CTk):
                 lines = f.readlines()
             
             processed_lines = []
+            original_lines = []
             previous_x_value = None
             modifications_count = 0
+            changes = []  # Store (line_number, original, modified, difference)
             
             for i, line in enumerate(lines, 1):
+                original_line = line
                 current_x = self.extract_x_value(line)
                 
                 # Check if current line has a negative X value
@@ -272,15 +276,17 @@ class NCFileProcessor(ctk.CTk):
                             # Check if line doesn't already start with G0
                             stripped_line = line.lstrip()
                             if not stripped_line.upper().startswith('G0'):
-                                line = "G0 " + line.lstrip()
+                                modified_line = "G0 " + line.lstrip()
+                                changes.append((i, original_line.rstrip(), modified_line.rstrip(), difference))
+                                line = modified_line
                                 modifications_count += 1
-                                self.log_message(f"Line {i}: Added G0 prefix (diff: {difference:.3f})")
                 
                 # Update previous_x_value if current line has an X value
                 if current_x is not None:
                     previous_x_value = current_x
                 
                 processed_lines.append(line)
+                original_lines.append(original_line)
             
             # Generate output filename
             input_path = Path(self.input_file_path)
@@ -297,6 +303,17 @@ class NCFileProcessor(ctk.CTk):
             self.log_message(f"\n✓ Processing complete!")
             self.log_message(f"✓ Output saved to: {output_path.name}")
             self.log_message(f"✓ Total modifications: {modifications_count}")
+            
+            # Show diff log
+            if changes:
+                self.log_message(f"\n--- Change Log ---")
+                for line_num, original, modified, diff in changes:
+                    self.log_message(f"\nLine {line_num} (diff: {diff:.3f}):")
+                    self.log_message(f"  - {original}")
+                    self.log_message(f"  + {modified}")
+            else:
+                self.log_message(f"\nNo changes were needed.")
+            
             self.drop_label.configure(text=f"✓ Processed!\n{output_path.name}")
             
             # Show success dialog with option to open folder
