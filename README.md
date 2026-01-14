@@ -24,11 +24,19 @@ The processor follows this logic:
 
 ## Installation
 
-### Prerequisites
+### For End Users (Download Pre-built .exe)
+
+1. Go to [Releases](https://github.com/applesnort/nc_file_processor/releases)
+2. Download `NCFileProcessor.exe` from the latest release
+3. Double-click to run - no installation needed!
+
+### For Developers
+
+#### Prerequisites
 - Python 3.8 or higher
 - Windows (or macOS/Linux for development)
 
-### Setup
+#### Setup
 
 1. Install Python dependencies:
 ```bash
@@ -60,9 +68,28 @@ pip install pyinstaller
 pyinstaller --onefile --windowed --name "NCFileProcessor" --hidden-import=tkinterdnd2 --hidden-import=customtkinter nc_file_processor.py
 ```
 
-3. The executable will be in the `dist` folder - just give `NCFileProcessor.exe` to your cousin!
+3. The executable will be in the `dist` folder
 
 **Note:** The .exe file will be large (~50-100MB) because it includes Python and all dependencies. This is normal for standalone executables.
+
+## Creating GitHub Releases
+
+This repository uses GitHub Actions to automatically build and create releases. To create a new release:
+
+1. Create and push a version tag:
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+2. GitHub Actions will automatically:
+   - Build the Windows .exe on a Windows runner
+   - Create a GitHub release
+   - Attach the .exe file to the release
+
+Alternatively, you can manually trigger the workflow from the GitHub Actions tab.
+
+The release will appear at: https://github.com/applesnort/nc_file_processor/releases
 
 ## Example
 
@@ -83,46 +110,3 @@ G0 -X1.5
 ```
 
 (The second and fourth lines get `G0` prefix because the differences are ≥ 0.2)
-
-## Testing on Mac
-
-Yes! You can test and develop this on your Mac. CustomTkinter works on macOS, Linux, and Windows. Just install the dependencies and run:
-
-```bash
-pip install -r requirements.txt
-python nc_file_processor.py
-```
-
-The drag-and-drop will work on Mac too! However, the final .exe build needs to be done on Windows (or using Wine/Cross-compilation tools).
-
-## Pushing to GitHub
-
-To push this to GitHub:
-
-1. **Create a new repository on GitHub** (github.com/new)
-   - **⚠️ IMPORTANT: Select "Public" (not Private)!**
-   - Don't initialize with README (we already have one)
-2. Run the setup script (or manually):
-```bash
-chmod +x setup_github.sh
-./setup_github.sh
-```
-
-3. Add your GitHub remote and push:
-```bash
-git remote add origin https://github.com/YOUR_USERNAME/REPO_NAME.git
-git branch -M main
-git push -u origin main
-```
-
-Or if you prefer to do it manually:
-```bash
-git init
-git add .
-git commit -m "Initial commit: NC File Processor"
-git remote add origin https://github.com/YOUR_USERNAME/REPO_NAME.git
-git branch -M main
-git push -u origin main
-```
-
-**To verify it's public:** After pushing, check your repository on GitHub. If it's public, you'll see a "Public" badge next to the repository name. If it's private, you can change it in Settings → General → Danger Zone → Change repository visibility.
