@@ -28,12 +28,6 @@ class NCFileProcessor(ctk.CTk):
     def __init__(self):
         super().__init__()
         
-        # Enable drag-and-drop on the root window if available
-        if DND_AVAILABLE:
-            # Make the root window a drop target
-            self.drop_target_register(DND_FILES)
-            self.dnd_bind('<<Drop>>', self.on_drop)
-        
         self.title("NC File Processor")
         self.geometry("700x650")
         self.input_file_path = None
