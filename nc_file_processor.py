@@ -72,10 +72,15 @@ class NCFileProcessor(ctk.CTk):
         
         # Enable drag and drop on drop zone if available
         if DND_AVAILABLE:
-            # Get the underlying tkinter widget for drag-and-drop
-            drop_zone_tk = self.drop_zone._canvas  # CustomTkinter uses a canvas internally
-            drop_zone_tk.drop_target_register(DND_FILES)
-            drop_zone_tk.dnd_bind('<<Drop>>', self.on_drop)
+            try:
+                # Get the underlying tkinter widget for drag-and-drop
+                drop_zone_tk = self.drop_zone._canvas  # CustomTkinter uses a canvas internally
+                drop_zone_tk.drop_target_register(DND_FILES)
+                drop_zone_tk.dnd_bind('<<Drop>>', self.on_drop)
+            except Exception:
+                # tkinterdnd2 doesn't work with PyInstaller due to tkdnd DLL dependency
+                # Drag-and-drop will be disabled, but file selection button still works
+                pass
         
         # File selection frame
         self.file_frame = ctk.CTkFrame(self.main_frame)
