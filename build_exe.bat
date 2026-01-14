@@ -6,7 +6,7 @@ echo No Python installation needed!
 echo.
 pause
 
-pyinstaller --onefile --windowed --name "NCFileProcessor" --add-data "requirements.txt;." --hidden-import=tkinterdnd2 --hidden-import=customtkinter nc_file_processor.py
+pyinstaller --onefile --windowed --name "NCFileProcessor" --add-data "requirements.txt;." --hidden-import=tkinterdnd2 --hidden-import=customtkinter --collect-all tkinterdnd2 nc_file_processor.py
 
 echo.
 echo Build complete! Check the 'dist' folder for NCFileProcessor.exe

@@ -29,7 +29,7 @@ jobs:
         
     - name: Build executable
       run: |
-        pyinstaller --onefile --windowed --name "NCFileProcessor" --add-data "requirements.txt;." --hidden-import=tkinterdnd2 --hidden-import=customtkinter nc_file_processor.py
+        pyinstaller --onefile --windowed --name "NCFileProcessor" --add-data "requirements.txt;." --hidden-import=tkinterdnd2 --hidden-import=customtkinter --collect-all tkinterdnd2 nc_file_processor.py
         
     - name: Create Release
       if: startsWith(github.ref, 'refs/tags/')
